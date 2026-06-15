@@ -7,14 +7,21 @@ import { Good } from './types/Good';
 
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<Good[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const loadAllGoods = useCallback(() => {
-    getAll().then(setGoods);
+    getAll()
+      .then(setGoods)
+      .catch(err => setErrorMessage(err.message));
   }, [setGoods]);
   const load5Goods = useCallback(() => {
-    get5First().then(setGoods);
+    get5First()
+      .then(setGoods)
+      .catch(err => setErrorMessage(err.message));
   }, [setGoods]);
   const loadRedGoods = useCallback(() => {
-    getRedGoods().then(setGoods);
+    getRedGoods()
+      .then(setGoods)
+      .catch(err => setErrorMessage(err.message));
   }, [setGoods]);
 
   return (
@@ -34,6 +41,7 @@ export const App: React.FC = () => {
       </button>
 
       <GoodsList goods={goods} />
+      {errorMessage && <div>{errorMessage}</div>}
     </div>
   );
 };
